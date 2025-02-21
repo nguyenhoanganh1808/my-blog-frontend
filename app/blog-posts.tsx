@@ -4,24 +4,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import { motion } from "framer-motion";
+import { Tag as TagType } from "./page";
+import { Author } from "next/dist/lib/metadata/types/metadata-types";
+import { formatPostDate } from "@/lib/utils";
 
 interface BlogPostProps {
   title: string;
-  excerpt: string;
-  date: string;
-  author: string;
+  content: string;
+  createdAt: string;
+  author: Author;
   slug: string;
-  imageUrl: string;
-  tags: string[];
+  coverPhoto: string;
+  tags: TagType[];
 }
 
 export default function BlogPost({
   title,
-  excerpt,
-  date,
+  content,
+  createdAt,
   author,
   slug,
-  imageUrl,
+  coverPhoto,
   tags,
 }: BlogPostProps) {
   return (
@@ -37,7 +40,7 @@ export default function BlogPost({
         className="block relative h-48 md:h-64 w-full overflow-hidden"
       >
         <Image
-          src={imageUrl || "/placeholder.svg"}
+          src={coverPhoto || "/placeholder.svg"}
           alt={title}
           fill
           style={{ objectFit: "cover" }}
@@ -49,7 +52,7 @@ export default function BlogPost({
         <div className="flex flex-wrap gap-2 mb-3">
           {tags.map((tag, index) => (
             <motion.span
-              key={tag}
+              key={tag.id}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
@@ -57,7 +60,7 @@ export default function BlogPost({
                        hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors duration-200 cursor-pointer"
             >
               <Tag size={12} className="mr-1" />
-              {tag}
+              {tag.name}
             </motion.span>
           ))}
         </div>
@@ -70,7 +73,7 @@ export default function BlogPost({
           </Link>
         </h2>
         <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-          {excerpt}
+          {content}
         </p>
         <motion.div
           initial={{ opacity: 0 }}
@@ -79,15 +82,15 @@ export default function BlogPost({
           className="flex items-center text-sm text-gray-500 dark:text-gray-400"
         >
           <Image
-            src={`https://ui-avatars.com/api/?name=${author}&background=random`}
-            alt={author}
+            src={`https://ui-avatars.com/api/?name=${author.name}&background=random`}
+            alt={author.name || "Author"}
             width={24}
             height={24}
             className="rounded-full mr-2"
           />
-          <span>{author}</span>
+          <span>{author.name}</span>
           <span className="mx-2">•</span>
-          <time>{date}</time>
+          <time>{formatPostDate(createdAt)}</time>
         </motion.div>
       </div>
     </motion.article>
