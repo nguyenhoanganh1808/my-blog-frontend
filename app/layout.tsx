@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
 import { ModeToggle } from "../components/mode-toggle";
-import SearchBar from "../components/search-bar";
 import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -48,9 +47,6 @@ export default function RootLayout({
                     </Link>
                   ))}
                 </nav>
-              </div>
-              <div className="mt-4 flex items-center justify-end space-x-4">
-                <SearchBar />
                 <ModeToggle />
               </div>
             </div>
