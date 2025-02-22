@@ -22,7 +22,7 @@ export interface Tag {
   slug: string;
 }
 
-interface Post {
+export interface Post {
   id: number;
   title: string;
   content: string;
