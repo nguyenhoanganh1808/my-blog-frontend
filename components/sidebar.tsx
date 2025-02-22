@@ -3,12 +3,7 @@
 import Link from "next/link";
 import { Tag, Clock, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
-
-interface Tag {
-  id: number;
-  name: string;
-  slug: string;
-}
+import { Tag as TagType } from "@/app/page";
 
 interface RecentPost {
   id: number;
@@ -17,11 +12,13 @@ interface RecentPost {
 }
 
 interface SidebarProps {
-  tags: Tag[];
+  tags: TagType[];
   recentPosts: RecentPost[];
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
+  onTagClick: (tagSlug: string) => void;
+  activeTag: string;
 }
 
 export default function Sidebar({
@@ -29,6 +26,8 @@ export default function Sidebar({
   recentPosts,
   isLoading,
   error,
+  onTagClick,
+  activeTag,
   onRetry,
 }: SidebarProps) {
   if (isLoading) {
@@ -93,20 +92,21 @@ export default function Sidebar({
         </h3>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag, index) => (
-            <motion.div
+            <motion.button
               key={tag.id}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
+              onClick={() => onTagClick(tag.slug)}
+              className={`px-3 py-1 rounded-full text-sm transition-all duration-200 hover:shadow-md
+              ${
+                tag.slug === activeTag
+                  ? "bg-purple-600 text-white dark:bg-purple-500"
+                  : "bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800"
+              }`}
             >
-              <Link
-                href={`/tag/${tag.slug}`}
-                className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-full text-sm 
-                         hover:bg-purple-200 dark:hover:bg-purple-800 transition-all duration-200 hover:shadow-md inline-block"
-              >
-                {tag.name}
-              </Link>
-            </motion.div>
+              {tag.name}
+            </motion.button>
           ))}
         </div>
       </motion.div>
@@ -132,7 +132,7 @@ export default function Sidebar({
               <Link
                 href={`/blog/${post.slug}`}
                 className="text-gray-800 dark:text-gray-200 hover:text-purple-600 dark:hover:text-purple-400 
-                         transition-colors duration-200 block hover:translate-x-1 transform"
+                       transition-colors duration-200 block hover:translate-x-1 transform"
               >
                 {post.title}
               </Link>

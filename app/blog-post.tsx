@@ -6,7 +6,7 @@ import { Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { Tag as TagType } from "./page";
 import { Author } from "next/dist/lib/metadata/types/metadata-types";
-import { formatPostDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 interface BlogPostProps {
   title: string;
@@ -16,6 +16,8 @@ interface BlogPostProps {
   slug: string;
   coverPhoto: string;
   tags: TagType[];
+  onTagClick?: (tag: string) => void;
+  activeTag?: string;
 }
 
 export default function BlogPost({
@@ -26,6 +28,8 @@ export default function BlogPost({
   slug,
   coverPhoto,
   tags,
+  onTagClick,
+  activeTag,
 }: BlogPostProps) {
   return (
     <motion.article
@@ -51,17 +55,26 @@ export default function BlogPost({
       <div className="p-6">
         <div className="flex flex-wrap gap-2 mb-3">
           {tags.map((tag, index) => (
-            <motion.span
+            <motion.button
               key={tag.id}
+              onClick={(e) => {
+                e.preventDefault();
+                onTagClick?.(tag.name);
+              }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-full text-xs flex items-center
-                       hover:bg-purple-200 dark:hover:bg-purple-800 transition-colors duration-200 cursor-pointer"
+              className={`px-2 py-1 rounded-full text-xs flex items-center transition-all duration-200
+                ${
+                  tag.name === activeTag
+                    ? "bg-purple-600 text-white dark:bg-purple-500"
+                    : "bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800"
+                }
+                hover:shadow-md`}
             >
               <Tag size={12} className="mr-1" />
               {tag.name}
-            </motion.span>
+            </motion.button>
           ))}
         </div>
         <h2 className="text-xl font-bold mb-2">
@@ -81,16 +94,19 @@ export default function BlogPost({
           transition={{ delay: 0.2 }}
           className="flex items-center text-sm text-gray-500 dark:text-gray-400"
         >
-          <Image
-            src={`https://ui-avatars.com/api/?name=${author.name}&background=random`}
-            alt={author.name || "Author"}
-            width={24}
-            height={24}
-            className="rounded-full mr-2"
-          />
+          {
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={`https://ui-avatars.com/api/?name=${author.name}&background=random&format=png`}
+              alt={author.name || "Author"}
+              width={24}
+              height={24}
+              className="rounded-full mr-2"
+            />
+          }
           <span>{author.name}</span>
           <span className="mx-2">•</span>
-          <time>{formatPostDate(createdAt)}</time>
+          <time>{formatDate(createdAt)}</time>
         </motion.div>
       </div>
     </motion.article>
