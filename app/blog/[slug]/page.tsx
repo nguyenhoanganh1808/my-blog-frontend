@@ -4,10 +4,22 @@ import { ArrowLeft, Tag, Calendar, User } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { formatDate } from "@/lib/utils";
-import { Post } from "@/app/page";
+import Comments from "./comments";
+import { ApiResponse, Post } from "@/lib/types";
+import { API_URL } from "@/lib/constants";
 
 interface Props {
   params: { slug: string };
+}
+
+export async function generateStaticParams() {
+  const data: ApiResponse = await fetch(`${API_URL}/posts`).then((res) =>
+    res.json()
+  );
+
+  return data.data.map((post) => ({
+    slug: post.slug,
+  }));
 }
 
 // Generate metadata
@@ -34,7 +46,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function getPost(slug: string): Promise<Post> {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const res = await fetch(`${API_URL}/posts/${slug}`, {
     headers: {
       "Content-Type": "application/json",
@@ -110,6 +121,10 @@ export default async function BlogPost({ params }: Props) {
             {post.content.split("\n").map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
+          </div>
+
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
+            <Comments postId={post.id} />
           </div>
         </div>
       </div>

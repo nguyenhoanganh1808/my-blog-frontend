@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Tag } from "lucide-react";
 import { motion } from "framer-motion";
-import { Tag as TagType } from "./page";
 import { Author } from "next/dist/lib/metadata/types/metadata-types";
 import { formatDate } from "@/lib/utils";
+import { Tag as TagType } from "@/lib/types";
 
 interface BlogPostProps {
   title: string;

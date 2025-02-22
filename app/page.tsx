@@ -9,42 +9,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Search, X } from "lucide-react";
-
-export interface Author {
-  id: number;
-  name: string;
-  email: string;
-}
-
-export interface Tag {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  author: Author;
-  slug: string;
-  coverPhoto: string;
-  tags: Tag[];
-}
-
-interface Pagination {
-  page: number;
-  totalPages: number;
-  totalPosts: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-}
-
-interface ApiResponse {
-  data: Post[];
-  pagination: Pagination;
-}
+import {
+  ApiResponse,
+  Pagination as PaginationType,
+  Post,
+  Tag,
+} from "@/lib/types";
 
 const POSTS_PER_PAGE = 6;
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -57,7 +27,7 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
+  const [pagination, setPagination] = useState<PaginationType>({
     page: 1,
     totalPages: 1,
     totalPosts: 0,

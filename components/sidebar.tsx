@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Tag, Clock, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
-import { Tag as TagType } from "@/app/page";
+import { Tag as TagType } from "@/lib/types";
 
 interface RecentPost {
   id: number;
