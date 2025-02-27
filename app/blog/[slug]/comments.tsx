@@ -5,11 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AlertCircle, Loader2, MessageCircle, User } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { API_URL } from "@/lib/constants";
-import {
-  Comment,
-  CommentPagination as PaginationType,
-  CommentResponse,
-} from "@/lib/types";
+import { Comment, CommentResponse, Pagination } from "@/lib/types";
 import CommentPagination from "./comment-pagination";
 
 interface CommentsProps {
@@ -22,10 +18,10 @@ export default function Comments({ postId }: CommentsProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [meta, setMeta] = useState<PaginationType>({
+  const [meta, setMeta] = useState<Pagination>({
     page: 1,
     totalPages: 1,
-    totalComments: 0,
+    totalItems: 0,
   });
 
   const [optimisticComments, addOptimisticComment] = useOptimistic(
@@ -69,9 +65,7 @@ export default function Comments({ postId }: CommentsProps) {
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-        <h2 className="text-xl font-semibold">
-          Comments ({meta.totalComments})
-        </h2>
+        <h2 className="text-xl font-semibold">Comments ({meta.totalItems})</h2>
       </div>
 
       <CommentForm

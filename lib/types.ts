@@ -32,9 +32,9 @@ export interface Post {
 export interface Pagination {
   page: number;
   totalPages: number;
-  totalPosts: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
+  totalItems: number;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
 }
 
 export interface ApiResponse {
@@ -49,13 +49,7 @@ export interface Comment {
   createdAt: string;
 }
 
-export interface CommentPagination {
-  page: number;
-  totalPages: number;
-  totalComments: number;
-}
-
 export interface CommentResponse {
   data: Comment[];
-  pagination: CommentPagination;
+  pagination: Pagination;
 }

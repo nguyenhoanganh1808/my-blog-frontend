@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils";
 import Comments from "./comments";
 import { ApiResponse, Post } from "@/lib/types";
 import { API_URL } from "@/lib/constants";
+import BlogContent from "./blog-content";
 
 interface Props {
   params: { slug: string };
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function getPost(slug: string): Promise<Post> {
-  const res = await fetch(`${API_URL}/posts/${slug}`, {
+  const res = await fetch(`${API_URL}/posts/slug/${slug}`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -117,11 +118,7 @@ export default async function BlogPost({ params }: Props) {
             </div>
           </div>
 
-          <div className="prose prose-purple dark:prose-invert max-w-none">
-            {post.content.split("\n").map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </div>
+          <BlogContent content={post.content} />
 
           <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
             <Comments postId={post.id} />

@@ -30,7 +30,7 @@ export default function Home() {
   const [pagination, setPagination] = useState<PaginationType>({
     page: 1,
     totalPages: 1,
-    totalPosts: 0,
+    totalItems: 0,
     hasNextPage: false,
     hasPrevPage: false,
   });

@@ -85,9 +85,10 @@ export default function BlogPost({
             {title}
           </Link>
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-          {content}
-        </p>
+        <p
+          className="text-gray-600 dark:text-gray-300 mb-4 text-sm"
+          dangerouslySetInnerHTML={{ __html: content.slice(0, 200) + "..." }}
+        ></p>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
