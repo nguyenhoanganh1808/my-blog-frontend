@@ -10,7 +10,7 @@ import { API_URL } from "@/lib/constants";
 import BlogContent from "./blog-content";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -24,7 +24,8 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   try {
     const post = await getPost(params.slug);
 
@@ -60,7 +61,8 @@ async function getPost(slug: string): Promise<Post> {
   return res.json();
 }
 
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPost(props: Props) {
+  const params = await props.params;
   const post = await getPost(params.slug);
   const formattedDate = formatDate(post.createdAt);
 
