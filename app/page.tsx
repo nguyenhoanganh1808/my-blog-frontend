@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback, useTransition } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useTransition,
+  Suspense,
+} from "react";
 import BlogPost from "./blog-post";
 import Sidebar from "../components/sidebar";
 import Pagination from "../components/pagination";
@@ -15,6 +21,7 @@ import {
   Post,
   Tag,
 } from "@/lib/types";
+import SearchInput from "./search-input";
 
 const POSTS_PER_PAGE = 6;
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -205,19 +212,21 @@ export default function Home() {
               </button>
             )}
           </div>
-
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
-            <input
-              type="search"
-              placeholder="Search posts..."
-              defaultValue={currentSearch}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg 
-                       bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 
+            <Suspense fallback={null}>
+              <SearchInput onChange={(e) => handleSearch(e.target.value)} />
+            </Suspense>
+            {/* <input
+                type="search"
+                placeholder="Search posts..."
+                defaultValue={currentSearch}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg 
+              bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 
                        focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 
                        focus:border-transparent outline-none transition duration-200"
-            />
+              /> */}
           </div>
 
           {(currentSearch || currentTag) && (
@@ -226,7 +235,7 @@ export default function Home() {
               {currentSearch && (
                 <span
                   className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-600 
-                               dark:text-purple-300 rounded-full text-xs"
+                dark:text-purple-300 rounded-full text-xs"
                 >
                   Search: {currentSearch}
                 </span>
