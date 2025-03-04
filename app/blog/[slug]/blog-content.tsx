@@ -88,9 +88,10 @@ const BlogContent: React.FC<BlogContentProps> = ({
                   paddingRight: "0.5em",
                   userSelect: "none",
                 }}
-                renderlinenumber={(lineNumber: number) => (
-                  <LineNumber lineNumber={lineNumber} />
-                )}
+                showInlineLineNumbers={true}
+                // renderlinenumber={(lineNumber: number) => (
+                //   <LineNumber lineNumber={lineNumber} />
+                // )}
               >
                 {codeContent}
               </SyntaxHighlighter>
