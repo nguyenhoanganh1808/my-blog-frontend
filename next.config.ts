@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
-  output: "standalone",
+  output: "export",
   images: {
     domains: [
       "images.unsplash.com",
