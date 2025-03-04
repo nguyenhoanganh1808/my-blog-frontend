@@ -1,10 +1,11 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import DOMPurify from "dompurify";
+// import DOMPurify from "dompurify";
+
 import parse, {
   domToReact,
   type HTMLReactParserOptions,
@@ -18,37 +19,27 @@ interface BlogContentProps {
   className?: string;
 }
 
-// Custom line number component with colorful styling
-const LineNumber = ({ lineNumber }: { lineNumber: number }) => {
-  const hue = (lineNumber * 20) % 360;
-  return (
-    <span
-      style={{
-        display: "block",
-        color: `hsl(${hue}, 70%, 60%)`,
-        textAlign: "right",
-        paddingRight: "1em",
-        userSelect: "none",
-      }}
-    >
-      {lineNumber}
-    </span>
-  );
-};
-
 const BlogContent: React.FC<BlogContentProps> = ({
   content,
   className = "",
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Sanitize HTML content
-  const sanitizedContent = DOMPurify.sanitize(content, {
-    ADD_TAGS: ["iframe"],
-    ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "scrolling"],
-  });
+  const [sanitizedContent, setSanitizedContent] = useState<string>("");
 
-  // Custom parser options for html-react-parser
+  useEffect(() => {
+    const sanitizeContent = async () => {
+      const DOMPurify = (await import("dompurify")).default;
+      const sanitized = DOMPurify.sanitize(content, {
+        ADD_TAGS: ["iframe"],
+        ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "scrolling"],
+      });
+      setSanitizedContent(sanitized);
+    };
+
+    sanitizeContent();
+  }, [content]);
+
   const options: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.name === "pre") {
