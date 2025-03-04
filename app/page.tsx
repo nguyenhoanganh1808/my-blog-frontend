@@ -62,7 +62,7 @@ export default function Home() {
           current.set(key, String(value));
         }
       });
-
+      current.set("published", "true");
       return current.toString();
     },
     [searchParams]
